@@ -8,7 +8,7 @@ OBJ = $(SRC:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
 CC = g++
 CPPFLAGS = -Iinclude -MMD -MP
-CFLAGS = -Wall
+CFLAGS = -Wall -pthread
 LDFLAGS = -Llib
 LDLIBS = -lm
 
