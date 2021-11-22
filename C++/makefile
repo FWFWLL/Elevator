@@ -9,15 +9,13 @@ OBJ = $(SRC:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 CC = g++
 CPPFLAGS = -Iinclude -MMD -MP
 CFLAGS = -Wall -pthread
-LDFLAGS = -Llib
-LDLIBS = -lm
 
 .PHONY: all clean
 
 all: $(EXE)
 
 $(EXE): $(OBJ) | $(BINDIR)
-	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+	$(CC) $(CFLAGS) $^ -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp | $(OBJDIR)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@

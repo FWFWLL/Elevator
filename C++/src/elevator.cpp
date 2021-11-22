@@ -10,22 +10,25 @@
 
 class Elevator {
 	private:
-		int currentFloor;
-		Queue floorQueue;
+		int iCurrFloor;
+		int iDestFloor;
 	public:
+		Queue floorQueue;
+		
 		Elevator() {
-			currentFloor = 1;
+			iCurrFloor = 1;
+			iDestFloor = -1;
 		}
 		
 		/* When the elevator is moving to the destination floor we want */
 		/* The elevator moves past each floor, we want to see this */
 		void moveToFloor(int floor) {
-			while(currentFloor != floor && floor != -1) {
-				system("clear");
-				display();
-				sleep(1);
-				if(currentFloor < floor) currentFloor++;
-				else currentFloor--;
+			iDestFloor = floor;
+			while(iCurrFloor != iDestFloor && iDestFloor != -1) {
+				sleep(2);
+				if(iCurrFloor < iDestFloor) iCurrFloor++;
+				else iCurrFloor--;
+				display();	
 			}
 		}
 
@@ -34,31 +37,39 @@ class Elevator {
 			floorQueue.enqueue(floor);
 		}
 		
-		/* Get the current floor we are on */
-		int getCurrentFloor() {
-			return currentFloor;
-		}
-		
 		/* Display information about our elevator */
 		void display() {
-			std::cout << "Current floor: " << getCurrentFloor() << std::endl;
+			system("clear");
+			if(iDestFloor != -1) std::cout << "Moving to floor: " << iDestFloor << std::endl;
+			std::cout << "Current floor: " << iCurrFloor << std::endl;
 			std::cout << "Internal elevator queue: ";
 			floorQueue.print();
 			std::cout << std::endl;
+		}
+		
+		/* Thread function */
+		void run(int i) {
+			while(true) {
+				sleep(2);
+				moveToFloor(floorQueue.dequeue());
+			}
 		}
 };
 
 int main() {
 	Elevator elevator;
-	int input = 1;
+	int input;
+	std::thread thread(&Elevator::run, &elevator, NULL);	
 	while(true) {
+		elevator.display();
 		std::cin >> input;
-		if(input == 0) break;
+		if(input == 0) {
+			std::terminate();
+			break;
+		}
 		if(input < 13 && input > 0) {
 			elevator.pressButton(input);
-			std::thread thread(&Elevator::moveToFloor, Elevator());	
 		}
-		input = -1;
 	}
 	return 0;
 }

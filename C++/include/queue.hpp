@@ -12,10 +12,12 @@ typedef struct Node {
 
 typedef struct Queue {
 	Node *front, *rear;
-	
+	int size;
+
 	/* Initialize front and rear as NULL */
 	Queue() {
 		front = rear = NULL;
+		size = 0;
 	}
 	
 	/* Check if Queue contains given parameter, O(n) */
@@ -35,6 +37,7 @@ typedef struct Queue {
 		}
 		rear -> next = temp;
 		rear = temp;
+		size++;
 	}
 	
 	/* Removes and returns the Node at the front of the Queue, O(1) */
@@ -47,6 +50,7 @@ typedef struct Queue {
 		/* If front becomes NULL, make rear also NULL */
 		if(front == NULL) rear = NULL;
 		delete(temp);
+		--size;
 		return data;
 	}
 	
